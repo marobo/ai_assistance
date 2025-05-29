@@ -1,0 +1,48 @@
+{% extends base_template %}
+{% load i18n %}
+
+{% block title %}{% trans "Ask AI - House Estimator" %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0">
+                    <i class="fas fa-robot"></i> {% trans "Ask AI Assistant" %}
+                </h3>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4">
+                    {% trans "Ask me anything about house construction, materials, calculations, or any other topic. I'm here to help!" %}
+                </p>
+                <form
+                    hx-post="{% url 'ai_assistance:ask_ai' %}" 
+                    hx-target="#content"
+                    hx-swap="innerHTML"
+                    hx-push-url="true"
+                    class="mb-3"
+                >
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="question" class="form-label">{% trans "Your Question" %}</label>
+                        <textarea
+                            name="question"
+                            id="question"
+                            placeholder="{% trans 'Type your question here...' %}" 
+                            required 
+                            class="form-control"
+                            rows="4"
+                        ></textarea>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> {% trans 'Ask AI' %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
