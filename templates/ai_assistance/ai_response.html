@@ -24,14 +24,14 @@
             <div class="card-body">
                 {% if question %}
                 <div class="mb-3">
-                    <h5 class="text-muted">{% trans "Your Question:" %}</h5>
+                    <h5 class="text-muted"><i class="fas fa-user"></i> {% trans "Your Question:" %}</h5>
                     <div class="bg-light p-3 rounded">
                         {{ question }}
                     </div>
                 </div>
                 {% endif %}
                 <div class="ai-response">
-                    <h5 class="text-primary">{% trans "AI Response:" %}</h5>
+                    <h5 class="text-primary"><i class="fas fa-robot"></i> {% trans "AI Response:" %}</h5>
                     {{ response|linebreaks }}
                 </div>
             </div>
