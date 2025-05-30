@@ -1,7 +1,13 @@
 {% extends base_template %}
 {% load i18n %}
+{% load static %}
 
-{% block title %}{% trans "AI Response - House Estimator" %}{% endblock %}
+{% block title %}{% trans "AI Response" %}{% endblock %}
+
+{% block og_meta %}
+<meta name="description" content="{% trans 'AI Response to your question' %}">
+<meta property="og:image" content="{% static 'img/ai-robot.webp' %}">
+{% endblock %}
 
 {% block content %}
 <div class="row">

@@ -1,7 +1,13 @@
 {% extends base_template %}
 {% load i18n %}
+{% load static %}
 
-{% block title %}{% trans "Ask AI - House Estimator" %}{% endblock %}
+{% block title %}{% trans "Ask AI Assistant" %}{% endblock %}
+
+{% block og_meta %}
+<meta name="description" content="{% trans 'Ask me anything about house construction, materials, calculations, or any other topic. I am here to help!' %}">
+<meta property="og:image" content="{% static 'img/ai-robot.webp' %}">
+{% endblock %}
 
 {% block content %}
 <div class="row">
