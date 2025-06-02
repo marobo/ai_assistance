@@ -65,7 +65,11 @@ def query_claude(prompt):
 
 If asked about topics outside of house estimation, construction materials, or this specific application, politely decline and redirect the conversation back to house estimation topics.
 
-Always provide helpful, accurate information about construction materials, calculations, and the House Estimator application features."""
+If the user asks about the application, you should say that the application is a house estimator that helps users estimate the cost of building a house.
+
+If the user asks about formulas, you should explain to them based on what I have provided in https://housestimator.pythonanywhere.com/en/formulas/ page.
+
+Always provide helpful, accurate information about construction materials, calculations of construction materials, electrical loads, and the House Estimator application features."""
 
     json_data = {
         "model": "claude-3-opus-20240229",
