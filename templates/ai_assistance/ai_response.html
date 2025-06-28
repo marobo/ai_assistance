@@ -24,21 +24,29 @@
                     hx-swap="outerHTML"
                     hx-push-url="true"
                 >
-                    {% trans "Ask Another Question" %}
+                    <i class="fas fa-plus me-1"></i>{% trans "Ask Another Question" %}
                 </button>
             </div>
             <div class="card-body">
                 {% if question %}
                 <div class="mb-3">
-                    <h5 class="text-muted"><i class="fas fa-user"></i> {% trans "Your Question:" %}</h5>
+                    <h5 class="text-muted">
+                        <i class="fas fa-user"></i> {% trans "Your Question:" %}
+                    </h5>
                     <div class="bg-light p-3 rounded">
+                        <i class="fas fa-quote-left me-2 text-muted"></i>
                         {{ question }}
+                        <i class="fas fa-quote-right ms-2 text-muted"></i>
                     </div>
                 </div>
                 {% endif %}
                 <div class="ai-response">
-                    <h5 class="text-primary"><i class="fas fa-robot"></i> {% trans "AI Response:" %}</h5>
-                    {{ response|linebreaks }}
+                    <h5 class="text-primary">
+                        <i class="fas fa-robot"></i> {% trans "AI Response:" %}
+                    </h5>
+                    <div class="bg-primary bg-opacity-10 p-3 rounded">
+                        {{ response|linebreaks }}
+                    </div>
                 </div>
             </div>
         </div>
