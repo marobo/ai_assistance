@@ -47,7 +47,7 @@ from django.urls import path, include
 
 urlpatterns = [
     # ... your other URLs
-    path('ai/', include('ai_assistance.urls')),
+    path('', include('ai_assistance.urls')),
 ]
 ```
 
