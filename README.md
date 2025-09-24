@@ -87,7 +87,7 @@ The app uses Django's built-in internationalization framework, so you can config
 
 Once installed and configured, users can access the AI assistant at:
 ```
-/ai/ask-ai/
+/ai-assistance/ask-ai/
 ```
 
 ### Features Available
