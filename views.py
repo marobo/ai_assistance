@@ -3,18 +3,18 @@ from django.conf import settings
 import httpx
 from django.utils.translation import gettext_lazy as _
 from django.views import View
-from materiais.views import BaseTemplateSelector
+from lista.views import _base_template as get_base_template
 
 
 class AskAIView(View):
     def get(self, request):
-        base_template = BaseTemplateSelector.get_base_template(request)
+        base_template = get_base_template(request)
         return render(request, 'ai_assistance/ai_question_page.html', {
             'base_template': base_template,
         })
 
     def post(self, request):
-        base_template = BaseTemplateSelector.get_base_template(request)
+        base_template = get_base_template(request)
         question = request.POST.get('question', '').strip()
 
         # Validate that a question was provided
