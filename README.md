@@ -19,7 +19,7 @@ This app is designed to be used as a git submodule in your main Django project:
 
 ```bash
 # Add as submodule
-git submodule add <repository-url> ai_assistance
+git submodule add git@github.com:marobo/ai_assistance.git ai_assistance
 
 # Initialize and update submodule
 git submodule update --init --recursive
