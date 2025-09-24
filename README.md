@@ -87,7 +87,7 @@ The app uses Django's built-in internationalization framework, so you can config
 
 Once installed and configured, users can access the AI assistant at:
 ```
-http://localhost:8000/tet/ask-ai/
+http://localhost:8000/ask-ai/
 ```
 
 ### Features Available
