@@ -74,12 +74,18 @@ httpx>=0.24.0
 
 - `ANTHROPIC_API_KEY`: Your Anthropic API key for Claude access
 
-### Optional Settings
+### Optional Settings (to decouple UI and per-app differences)
 
-The app uses Django's built-in internationalization framework, so you can configure:
-- `LANGUAGE_CODE`: Default language
-- `USE_I18N`: Enable internationalization (should be `True`)
-- `LOCALE_PATHS`: For custom translations
+- `AI_ASSISTANCE_BASE_TEMPLATE`: Template name to extend (default: `'base.html'`)
+- `AI_ASSISTANCE_BASE_TEMPLATE_FUNC`: Dotted path to a callable `(request) -> str` returning a base template
+- `AI_ASSISTANCE_HX_TARGET_ID`: DOM id for HTMX swaps (default: `'main-content'`)
+- `AI_ASSISTANCE_SYSTEM_PROMPT`: Static system prompt string
+- `AI_ASSISTANCE_SYSTEM_PROMPT_FUNC`: Dotted path to a callable `(request) -> str` for dynamic prompt
+- `AI_ASSISTANCE_MODEL`: Model name (default: `'claude-3-opus-20240229'`)
+- `AI_ASSISTANCE_TIMEOUT`: Request timeout seconds (default: `20`)
+
+Internationalization:
+- `LANGUAGE_CODE`, `USE_I18N`, `LOCALE_PATHS` per standard Django i18n
 
 ## Usage
 
@@ -95,6 +101,8 @@ Once installed and configured, users can access the AI assistant at:
 1. **Ask Questions**: Users can submit any question through a textarea form
 2. **Get AI Responses**: Receive intelligent responses from Claude AI
 3. **Error Handling**: Graceful handling of API errors with user-friendly messages
+4. **Headless Core**: Logic extracted to `ai_assistance/core.py` (no Django/UI coupling)
+5. **JSON API**: `POST /ai/api/ask/` returns `{ "answer": "..." }`
 
 ### API Integration Details
 
@@ -111,7 +119,9 @@ ai_assistance/
 ├── apps.py                 # Django app configuration
 ├── admin.py               # Django admin configuration
 ├── models.py              # Database models (currently empty)
-├── views.py               # Main view logic and Claude API integration
+├── core.py                # Headless core that calls the LLM API (httpx)
+├── utils.py               # Resolvers for template/prompt/model/timeout/hx target
+├── views.py               # Thin Django views (HTML + JSON) using core/utils
 ├── urls.py                # URL routing
 ├── tests.py               # Unit tests
 ├── migrations/            # Database migrations
