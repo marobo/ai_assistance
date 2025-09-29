@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-29 23:08+0900\n"
+"POT-Creation-Date: 2025-09-29 23:09+0900\n"
 "PO-Revision-Date: 2025-09-29 23:07+0900\n"
 "Last-Translator:   <dejesusony@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,58 +18,41 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Translated-Using: django-rosetta 0.10.2\n"
 
-#: templates/ai_assistance/ai_question_page.html:5
-#: templates/ai_assistance/ai_question_page.html:18
 msgid "Ask AI Assistant"
 msgstr "Husu Asistente AI"
 
-#: templates/ai_assistance/ai_question_page.html:32
 msgid "AI is thinking..."
 msgstr "AI sei hanoin hela..."
 
-#: templates/ai_assistance/ai_question_page.html:56
 msgid "Your Question"
 msgstr "Ita-nia Pergunta"
 
-#: templates/ai_assistance/ai_question_page.html:60
 msgid "Type your question here..."
 msgstr "Hakerek ita-nia pergunta iha ne'e..."
 
-#: templates/ai_assistance/ai_question_page.html:69
 msgid "Ask AI"
 msgstr "Husu AI"
 
-#: templates/ai_assistance/ai_response.html:5
-#: templates/ai_assistance/ai_response.html:18
 msgid "AI Response"
 msgstr "AI Responde"
 
-#: templates/ai_assistance/ai_response.html:8
 msgid "AI Response to your question"
 msgstr "AI Responde ba ita-boot nia pergunta"
 
-#: templates/ai_assistance/ai_response.html:27
 msgid "Ask Another Question"
 msgstr "Husu Pergunta Seluk"
 
-#: templates/ai_assistance/ai_response.html:34
 msgid "Your Question:"
 msgstr "Ita-nia Pergunta:"
 
-#: templates/ai_assistance/ai_response.html:45
 msgid "AI Response:"
 msgstr "AI Responde:"
 
-#: utils.py:98
 msgid "Ask me anything about this app. I'm here to help you!"
-msgstr ""
-"Husu mai ha'u buat ruma kona-ba aplikasaun ida-ne'e. Ha'u iha ne'e atu ajuda "
-"ita-boot!"
+msgstr "Husu mai ha'u buat ruma kona-ba aplikasaun ida-ne'e. Ha'u iha ne'e atu ajuda ita-boot!"
 
-#: views.py:38
 msgid "Please provide a question to get an AI response."
 msgstr "Favór ida fo pergunta ida ba AI hodi hetan resposta."
 
-#: views.py:72 views.py:91
 msgid "Please provide a question."
 msgstr "Favór ida fo pergunta."
