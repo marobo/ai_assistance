@@ -5,7 +5,7 @@
 {% block title %}{% trans "Ask AI Assistant" %}{% endblock %}
 
 {% block og_meta %}
-<meta name="description" content="{% trans 'Ask me anything about house construction, materials, calculations, or any other topic. I am here to help!' %}">
+<meta name="description" content="{{ intro_text }}">
 <meta property="og:image" content="{% static 'img/ai-robot.webp' %}">
 {% endblock %}
 
@@ -20,7 +20,7 @@
             </div>
             <div class="card-body">
                 <p class="text-muted mb-4">
-                    {% trans "Ask me anything about house construction, materials, calculations, or any other topic. I'm here to help!" %}
+                    {{ intro_text }}
                 </p>
 
                 <!-- Progress bar (initially hidden) -->
