@@ -20,7 +20,7 @@
                 <button 
                     class="btn btn-sm btn-outline-primary"
                     hx-get="{% url 'ai_assistance:ask_ai' %}"
-                    hx-target="#content"
+                    hx-target="#{{ ai_hx_target_id|default:'main-content' }}"
                     hx-swap="outerHTML"
                     hx-push-url="true"
                 >

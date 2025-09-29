@@ -45,7 +45,7 @@
 
                 <form
                     hx-post="{% url 'ai_assistance:ask_ai' %}" 
-                    hx-target="#content"
+                    hx-target="#{{ ai_hx_target_id|default:'main-content' }}"
                     hx-swap="innerHTML"
                     hx-push-url="true"
                     hx-indicator="#ai-progress"
