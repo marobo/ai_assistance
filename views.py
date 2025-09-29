@@ -11,6 +11,7 @@ from .utils import (
     resolve_model_name,
     resolve_timeout_seconds,
     resolve_hx_target_id,
+    resolve_intro_text,
 )
 
 
@@ -20,6 +21,7 @@ class AskAIView(View):
         return render(request, 'ai_assistance/ai_question_page.html', {
             'base_template': base_template,
             'ai_hx_target_id': resolve_hx_target_id(),
+            'intro_text': resolve_intro_text(request),
         })
 
     def post(self, request):

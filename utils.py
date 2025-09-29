@@ -77,3 +77,23 @@ def resolve_model_name() -> str:
 
 def resolve_timeout_seconds() -> int:
     return int(getattr(settings, "AI_ASSISTANCE_TIMEOUT", 20))
+
+
+def resolve_intro_text(request) -> str:
+    """Return the intro text shown on the Ask AI page.
+
+    Supports either a literal string via AI_ASSISTANCE_INTRO_TEXT or a
+    dotted-path callable via AI_ASSISTANCE_INTRO_TEXT_FUNC that accepts the
+    request and returns a string.
+    """
+    resolver_path: Optional[str] = getattr(
+        settings, "AI_ASSISTANCE_INTRO_TEXT_FUNC", None
+    )
+    if resolver_path:
+        func = _resolve_callable(resolver_path)
+        return func(request)
+
+    default_intro = (
+        "Ask me anything about this app. I'm here to help you!"
+    )
+    return getattr(settings, "AI_ASSISTANCE_INTRO_TEXT", default_intro)
