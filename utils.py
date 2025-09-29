@@ -2,6 +2,7 @@ from importlib import import_module
 from typing import Optional
 
 from django.conf import settings
+from django.utils.translation import gettext as _
 
 
 DEFAULT_BASE_TEMPLATE = "base.html"
@@ -93,7 +94,7 @@ def resolve_intro_text(request) -> str:
         func = _resolve_callable(resolver_path)
         return func(request)
 
-    default_intro = (
+    default_intro = (_(
         "Ask me anything about this app. I'm here to help you!"
-    )
+    ))
     return getattr(settings, "AI_ASSISTANCE_INTRO_TEXT", default_intro)
