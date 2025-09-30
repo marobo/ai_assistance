@@ -13,9 +13,39 @@ A Django application that provides AI-powered assistance through integration wit
 
 ## Installation
 
+### As a Python Package (Recommended)
+
+Install using pip from the local directory:
+
+```bash
+# Install in development mode
+pip install -e /path/to/ai_assistance
+
+# Or install normally
+pip install /path/to/ai_assistance
+```
+
+### Using Flit (Development)
+
+If you have Flit installed, you can build and install the package:
+
+```bash
+# Install flit if you haven't already
+pip install flit
+
+# Build the package
+flit build
+
+# Install in development mode
+flit install --symlink
+
+# Or install from built wheel
+pip install dist/django_ai_assistance-*.whl
+```
+
 ### As a Git Submodule
 
-This app is designed to be used as a git submodule in your main Django project:
+This app can also be used as a git submodule in your main Django project:
 
 ```bash
 # Add as submodule
@@ -150,13 +180,67 @@ The app includes comprehensive error handling for:
 - The app includes CSRF protection for form submissions
 - Input validation prevents empty question submissions
 
+## Development
+
+### Building with Flit
+
+This package uses Flit for building and packaging. To set up development:
+
+```bash
+# Install flit
+pip install flit
+
+# Install the package in development mode
+flit install --symlink
+
+# Build the package
+flit build
+
+# Check the package
+flit check
+```
+
+### Development Dependencies
+
+Install development dependencies:
+
+```bash
+pip install -e ".[dev]"
+```
+
+This will install additional tools like pytest, black, isort, and flake8.
+
+### Running Tests
+
+```bash
+# Run tests
+pytest
+
+# Run tests with coverage
+pytest --cov=ai_assistance
+```
+
+### Code Formatting
+
+```bash
+# Format code with black
+black ai_assistance/
+
+# Sort imports with isort
+isort ai_assistance/
+
+# Check code style with flake8
+flake8 ai_assistance/
+```
+
 ## Contributing
 
 This is a git submodule, so contributions should be made to the original repository. When making changes:
 
 1. Make changes in the submodule directory
-2. Commit changes in the submodule
-3. Update the parent project to reference the new commit
+2. Run tests and formatting tools
+3. Commit changes in the submodule
+4. Update the parent project to reference the new commit
 
 ## License
 
