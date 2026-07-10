@@ -43,9 +43,9 @@ class AskAIView(View):
                 },
             )
 
-        claude_response = core_ask_ai(
+        ai_response = core_ask_ai(
             question,
-            api_key=getattr(settings, 'ANTHROPIC_API_KEY', None),
+            api_key=getattr(settings, 'OPENROUTER_API_KEY', None),
             system_prompt=resolve_system_prompt(request),
             model=resolve_model_name(),
             timeout_seconds=resolve_timeout_seconds(),
@@ -55,7 +55,7 @@ class AskAIView(View):
             request,
             'ai_assistance/ai_response.html',
             {
-                'response': claude_response,
+                'response': ai_response,
                 'question': question,
                 'base_template': base_template,
                 'ai_hx_target_id': resolve_hx_target_id(),
@@ -74,7 +74,7 @@ class AskAIAPIView(View):
 
         answer = core_ask_ai(
             question,
-            api_key=getattr(settings, 'ANTHROPIC_API_KEY', None),
+            api_key=getattr(settings, 'OPENROUTER_API_KEY', None),
             system_prompt=resolve_system_prompt(request),
             model=resolve_model_name(),
             timeout_seconds=resolve_timeout_seconds(),
@@ -93,7 +93,7 @@ class AskAIAPIView(View):
 
         answer = core_ask_ai(
             question,
-            api_key=getattr(settings, 'ANTHROPIC_API_KEY', None),
+            api_key=getattr(settings, 'OPENROUTER_API_KEY', None),
             system_prompt=resolve_system_prompt(request),
             model=resolve_model_name(),
             timeout_seconds=resolve_timeout_seconds(),

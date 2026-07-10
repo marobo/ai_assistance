@@ -2,7 +2,7 @@ import httpx
 from typing import Optional
 
 
-DEFAULT_MODEL = "claude-3-opus-20240229"
+DEFAULT_MODEL = "openai/gpt-4o-mini"
 
 
 def ask_ai(
@@ -13,7 +13,7 @@ def ask_ai(
     model: str = DEFAULT_MODEL,
     timeout_seconds: int = 20,
 ) -> str:
-    """Call the Anthropic API with the given parameters and return the text.
+    """Call the OpenRouter API with the given parameters and return the text.
 
     This function is framework-agnostic and contains no Django imports.
     All configuration must be passed in explicitly by the caller.
@@ -30,21 +30,22 @@ def ask_ai(
         )
 
     headers = {
-        "x-api-key": api_key,
-        "anthropic-version": "2023-06-01",
+        "Authorization": f"Bearer {api_key}",
         "content-type": "application/json",
     }
 
     json_data = {
         "model": model,
         "max_tokens": 300,
-        "system": system_prompt,
-        "messages": [{"role": "user", "content": prompt}],
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": prompt},
+        ],
     }
 
     try:
         response = httpx.post(
-            "https://api.anthropic.com/v1/messages",
+            "https://openrouter.ai/api/v1/chat/completions",
             headers=headers,
             json=json_data,
             timeout=timeout_seconds,
@@ -52,8 +53,8 @@ def ask_ai(
 
         if response.status_code == 200:
             data = response.json()
-            return data.get("content", [{}])[0].get(
-                "text",
+            return data.get("choices", [{}])[0].get("message", {}).get(
+                "content",
                 "No reply received from AI.",
             )
         if response.status_code == 401:

@@ -11,7 +11,7 @@
 
 ### Core Features
 - **AI Question Interface**: Clean, user-friendly form for submitting questions
-- **Claude API Integration**: Integration with Anthropic's Claude-3-Opus model
+- **OpenRouter Integration**: Access to many LLM models via a single API
 - **Real-time Responses**: Dynamic form submission without page reloads using HTMX
 - **Error Handling**: Comprehensive error management for API failures and timeouts
 - **Modern UI**: Bootstrap-powered responsive interface
@@ -27,7 +27,7 @@
 - **Framework**: Django 3.2+
 - **Language**: Python 3.8+
 - **HTTP Client**: httpx (v0.24.0+)
-- **AI Service**: Anthropic Claude API (claude-3-opus-20240229)
+- **AI Service**: OpenRouter API
 
 ### Frontend
 - **CSS Framework**: Bootstrap
@@ -36,7 +36,7 @@
 
 ### Integration
 - **Deployment**: Git Submodule
-- **API Version**: Anthropic API 2023-06-01
+- **API**: OpenRouter chat completions (OpenAI-compatible)
 
 ## Project Structure
 
@@ -72,7 +72,7 @@ ai_assistance/
 - [x] Template structure
 
 ### Phase 2: AI Integration ✅
-- [x] Anthropic Claude API integration
+- [x] OpenRouter API integration
 - [x] HTTP client setup with httpx
 - [x] API authentication and configuration
 - [x] Response handling and parsing
@@ -105,7 +105,7 @@ ai_assistance/
 ### Environment Requirements
 - Python 3.8 or higher
 - Django 3.2 or higher
-- Valid Anthropic API key
+- Valid OpenRouter API key
 - Internet connectivity for API calls
 
 ### Dependencies
@@ -116,17 +116,17 @@ django-rosetta
 ```
 
 ### Configuration Requirements
-- `ANTHROPIC_API_KEY` environment variable
+- `OPENROUTER_API_KEY` environment variable
 - Django settings integration
 - URL pattern inclusion
 
 ## API Specifications
 
-### Claude API Configuration
-- **Model**: claude-3-opus-20240229
+### OpenRouter API Configuration
+- **Endpoint**: `https://openrouter.ai/api/v1/chat/completions`
+- **Default Model**: `openai/gpt-4o-mini`
 - **Max Tokens**: 300 per response
 - **Timeout**: 20 seconds
-- **API Version**: 2023-06-01
 
 ### Error Handling Coverage
 - Missing API key scenarios
@@ -145,7 +145,7 @@ django-rosetta
 
 ### Integration Steps
 1. Add to `INSTALLED_APPS`
-2. Configure `ANTHROPIC_API_KEY`
+2. Configure `OPENROUTER_API_KEY`
 3. Include URL patterns
 4. Run migrations (if applicable)
 5. Access via `/ai/ask-ai/` endpoint
@@ -191,7 +191,7 @@ django-rosetta
 
 ### Version Compatibility
 - Maintain Django LTS compatibility
-- Track Anthropic API updates
+- Track OpenRouter API updates
 - Monitor Python version requirements
 
 ## Success Metrics
@@ -209,7 +209,7 @@ django-rosetta
 ## Risk Management
 
 ### Technical Risks
-- **API Changes**: Monitor Anthropic API updates
+- **API Changes**: Monitor OpenRouter API updates
 - **Rate Limiting**: Implement proper error handling
 - **Network Issues**: Robust timeout and retry logic
 
