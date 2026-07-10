@@ -72,7 +72,7 @@ def resolve_model_name() -> str:
     return getattr(
         settings,
         "AI_ASSISTANCE_MODEL",
-        "claude-3-opus-20240229",
+        "openai/gpt-4o-mini",
     )
 
 

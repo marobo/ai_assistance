@@ -1,11 +1,11 @@
 # AI Assistance Django App
 
-A Django application that provides AI-powered assistance through integration with Anthropic's Claude API. This app allows users to ask questions and receive intelligent responses from Claude AI within a Django web application.
+A Django application that provides AI-powered assistance through integration with the OpenRouter API. This app allows users to ask questions and receive intelligent responses within a Django web application.
 
 ## Features
 
 - **AI Question Interface**: Clean, user-friendly form for submitting questions to AI
-- **Claude API Integration**: Powered by Anthropic's Claude-3-Opus model
+- **OpenRouter Integration**: Access to many LLM models via a single API
 - **Internationalization Support**: Built-in support for multiple languages using Django's i18n framework
 - **HTMX Integration**: Dynamic form submission without page reloads
 - **Error Handling**: Comprehensive error handling for API failures, timeouts, and authentication issues
@@ -37,8 +37,8 @@ INSTALLED_APPS = [
 
 2. **Configure API Key** in your settings:
 ```python
-# Required: Anthropic API key
-ANTHROPIC_API_KEY = 'your-anthropic-api-key-here'
+# Required: OpenRouter API key
+OPENROUTER_API_KEY = 'your-openrouter-api-key-here'
 ```
 
 3. **Include URLs** in your main `urls.py`:
@@ -61,7 +61,7 @@ python manage.py migrate
 This app requires the following Python packages:
 
 - `Django` (compatible with Django's internationalization framework)
-- `httpx` (for HTTP requests to Anthropic API)
+- `httpx` (for HTTP requests to OpenRouter API)
 
 Add to your `requirements.txt`:
 ```
@@ -72,7 +72,7 @@ httpx>=0.24.0
 
 ### Required Settings
 
-- `ANTHROPIC_API_KEY`: Your Anthropic API key for Claude access
+- `OPENROUTER_API_KEY`: Your OpenRouter API key
 
 ### Optional Settings (to decouple UI and per-app differences)
 
@@ -81,7 +81,7 @@ httpx>=0.24.0
 - `AI_ASSISTANCE_HX_TARGET_ID`: DOM id for HTMX swaps (default: `'main-content'`)
 - `AI_ASSISTANCE_SYSTEM_PROMPT`: Static system prompt string
 - `AI_ASSISTANCE_SYSTEM_PROMPT_FUNC`: Dotted path to a callable `(request) -> str` for dynamic prompt
-- `AI_ASSISTANCE_MODEL`: Model name (default: `'claude-3-opus-20240229'`)
+- `AI_ASSISTANCE_MODEL`: Model name (default: `'openai/gpt-4o-mini'`)
 - `AI_ASSISTANCE_TIMEOUT`: Request timeout seconds (default: `20`)
 
 Internationalization:
@@ -99,17 +99,17 @@ http://localhost:8000/ask-ai/
 ### Features Available
 
 1. **Ask Questions**: Users can submit any question through a textarea form
-2. **Get AI Responses**: Receive intelligent responses from Claude AI
+2. **Get AI Responses**: Receive intelligent responses from the configured model
 3. **Error Handling**: Graceful handling of API errors with user-friendly messages
 4. **Headless Core**: Logic extracted to `ai_assistance/core.py` (no Django/UI coupling)
 5. **JSON API**: `POST /ai/api/ask/` returns `{ "answer": "..." }`
 
 ### API Integration Details
 
-- **Model**: Claude-3-Opus (claude-3-opus-20240229)
+- **Provider**: OpenRouter (`https://openrouter.ai/api/v1/chat/completions`)
+- **Default Model**: `openai/gpt-4o-mini`
 - **Max Tokens**: 300 per response
 - **Timeout**: 20 seconds
-- **API Version**: 2023-06-01
 
 ## File Structure
 
@@ -166,11 +166,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For issues related to:
 - **Django Integration**: Check Django documentation and ensure proper configuration
-- **API Issues**: Verify your Anthropic API key and account status
+- **API Issues**: Verify your OpenRouter API key and account status
 - **UI Problems**: Ensure Bootstrap and HTMX are properly loaded in your base template
 
 ## Version Compatibility
 
 - **Django**: 3.2+ (uses modern class-based views and i18n)
 - **Python**: 3.8+ (required for httpx)
-- **Anthropic API**: Uses 2023-06-01 API version
+- **OpenRouter API**: OpenAI-compatible chat completions format
