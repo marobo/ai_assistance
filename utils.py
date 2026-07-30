@@ -98,3 +98,39 @@ def resolve_intro_text(request) -> str:
         "Ask me anything about this app. I'm here to help you!"
     ))
     return getattr(settings, "AI_ASSISTANCE_INTRO_TEXT", default_intro)
+
+
+CHAT_SESSION_KEY = "ai_assistance_chat"
+DEFAULT_CHAT_MAX_MESSAGES = 20
+
+
+def resolve_chat_max_messages() -> int:
+    return int(
+        getattr(
+            settings,
+            "AI_ASSISTANCE_CHAT_MAX_MESSAGES",
+            DEFAULT_CHAT_MAX_MESSAGES,
+        )
+    )
+
+
+def get_chat_history(request) -> list:
+    """Return the session chat history as a list of role/content dicts."""
+    history = request.session.get(CHAT_SESSION_KEY, [])
+    if not isinstance(history, list):
+        return []
+    return list(history)
+
+
+def save_chat_history(request, history: list) -> None:
+    """Persist chat history in the session, trimmed to the configured max."""
+    max_messages = resolve_chat_max_messages()
+    request.session[CHAT_SESSION_KEY] = list(history)[-max_messages:]
+    request.session.modified = True
+
+
+def clear_chat_history(request) -> None:
+    """Remove chat history from the session."""
+    if CHAT_SESSION_KEY in request.session:
+        del request.session[CHAT_SESSION_KEY]
+        request.session.modified = True

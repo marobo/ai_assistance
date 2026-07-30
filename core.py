@@ -1,5 +1,5 @@
 import httpx
-from typing import Optional
+from typing import List, Optional
 
 
 DEFAULT_MODEL = "openai/gpt-4o-mini"
@@ -12,11 +12,16 @@ def ask_ai(
     system_prompt: str,
     model: str = DEFAULT_MODEL,
     timeout_seconds: int = 20,
+    history: Optional[List[dict]] = None,
 ) -> str:
     """Call the OpenRouter API with the given parameters and return the text.
 
     This function is framework-agnostic and contains no Django imports.
     All configuration must be passed in explicitly by the caller.
+
+    ``history`` is an optional list of prior turns, each a dict with
+    ``role`` (``user`` or ``assistant``) and ``content``. The new ``prompt``
+    is appended as the latest user message.
     """
 
     if not prompt.strip():
@@ -34,13 +39,19 @@ def ask_ai(
         "content-type": "application/json",
     }
 
+    messages = [{"role": "system", "content": system_prompt}]
+    if history:
+        for msg in history:
+            role = msg.get("role")
+            content = (msg.get("content") or "").strip()
+            if role in ("user", "assistant") and content:
+                messages.append({"role": role, "content": content})
+    messages.append({"role": "user", "content": prompt})
+
     json_data = {
         "model": model,
         "max_tokens": 300,
-        "messages": [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": prompt},
-        ],
+        "messages": messages,
     }
 
     try:
