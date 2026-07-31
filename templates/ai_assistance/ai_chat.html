@@ -41,21 +41,19 @@
                 </p>
                 {% endif %}
 
-                <div id="ai-chat-messages" class="ai-chat-messages mb-4">
-                    {% for message in chat_messages %}
-                    <div class="mb-3 ai-chat-message ai-chat-{{ message.role }}">
-                        {% if message.role == "user" %}
-                        <div class="ai-chat-bubble bg-primary bg-opacity-10 p-3 rounded">
-                            {{ message.content|linebreaks }}
-                        </div>
-                        {% else %}
-                        <div class="ai-chat-bubble bg-light p-3 rounded">
-                            {{ message.content|linebreaks }}
-                        </div>
-                        {% endif %}
+                {% for message in chat_messages %}
+                <div class="mb-3 ai-chat-message ai-chat-{{ message.role }}">
+                    {% if message.role == "user" %}
+                    <div class="bg-primary bg-opacity-10 p-3 rounded">
+                        {{ message.content|linebreaks }}
                     </div>
-                    {% endfor %}
+                    {% else %}
+                    <div class="bg-light p-3 rounded">
+                        {{ message.content|linebreaks }}
+                    </div>
+                    {% endif %}
                 </div>
+                {% endfor %}
 
                 <!-- Progress bar (initially hidden) -->
                 <div id="ai-progress" class="mb-3 htmx-indicator">
@@ -138,6 +136,9 @@
     display: flex;
 }
 
+.ai-chat-message {
+    display: flex;
+}
 .ai-chat-user {
     justify-content: flex-end;
 }
@@ -146,8 +147,5 @@
     justify-content: flex-start;
 }
 
-.ai-chat-bubble {
-    max-width: 80%;
-}
 </style>
 {% endblock %}
