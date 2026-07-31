@@ -1,6 +1,7 @@
 {% extends base_template %}
 {% load i18n %}
 {% load static %}
+{% load ai_markdown %}
 
 {% block title %}{% trans "Ask AI Assistant" %}{% endblock %}
 
@@ -49,7 +50,7 @@
                     </div>
                     {% else %}
                     <div class="bg-light p-3 rounded">
-                        {{ message.content|linebreaks }}
+                        {{ message.content|markdown }}
                     </div>
                     {% endif %}
                 </div>
