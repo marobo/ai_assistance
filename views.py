@@ -12,36 +12,35 @@ from .utils import (
     resolve_timeout_seconds,
     resolve_hx_target_id,
     resolve_intro_text,
+    get_chat_history,
+    save_chat_history,
+    clear_chat_history,
 )
 
 
 class AskAIView(View):
-    def get(self, request):
+    def _render_chat(self, request):
         base_template = resolve_base_template(request)
-        return render(request, 'ai_assistance/ai_question_page.html', {
+        return render(request, 'ai_assistance/ai_chat.html', {
             'base_template': base_template,
             'ai_hx_target_id': resolve_hx_target_id(),
             'intro_text': resolve_intro_text(request),
+            'chat_messages': get_chat_history(request),
         })
 
-    def post(self, request):
-        base_template = resolve_base_template(request)
-        question = request.POST.get('question', '').strip()
+    def get(self, request):
+        return self._render_chat(request)
 
-        # Validate that a question was provided
+    def post(self, request):
+        if request.POST.get('clear'):
+            clear_chat_history(request)
+            return self._render_chat(request)
+
+        question = request.POST.get('question', '').strip()
+        history = get_chat_history(request)
+
         if not question:
-            return render(
-                request,
-                'ai_assistance/ai_response.html',
-                {
-                    'response': _(
-                        "Please provide a question to get an AI response."
-                    ),
-                    'question': "",
-                    'base_template': base_template,
-                    'ai_hx_target_id': resolve_hx_target_id(),
-                },
-            )
+            return self._render_chat(request)
 
         ai_response = core_ask_ai(
             question,
@@ -49,18 +48,14 @@ class AskAIView(View):
             system_prompt=resolve_system_prompt(request),
             model=resolve_model_name(),
             timeout_seconds=resolve_timeout_seconds(),
+            history=list(history),
         )
 
-        return render(
-            request,
-            'ai_assistance/ai_response.html',
-            {
-                'response': ai_response,
-                'question': question,
-                'base_template': base_template,
-                'ai_hx_target_id': resolve_hx_target_id(),
-            },
-        )
+        history.append({'role': 'user', 'content': question})
+        history.append({'role': 'assistant', 'content': ai_response})
+        save_chat_history(request, history)
+
+        return self._render_chat(request)
 
 
 # For programmatic access via API

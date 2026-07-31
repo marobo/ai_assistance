@@ -4,7 +4,8 @@ A Django application that provides AI-powered assistance through integration wit
 
 ## Features
 
-- **AI Question Interface**: Clean, user-friendly form for submitting questions to AI
+- **AI Question Interface**: Clean, user-friendly chat form for submitting questions to AI
+- **Chat History**: Session-backed conversation so follow-ups keep context
 - **OpenRouter Integration**: Access to many LLM models via a single API
 - **Internationalization Support**: Built-in support for multiple languages using Django's i18n framework
 - **HTMX Integration**: Dynamic form submission without page reloads
@@ -83,6 +84,8 @@ httpx>=0.24.0
 - `AI_ASSISTANCE_SYSTEM_PROMPT_FUNC`: Dotted path to a callable `(request) -> str` for dynamic prompt
 - `AI_ASSISTANCE_MODEL`: Model name (default: `'openai/gpt-4o-mini'`)
 - `AI_ASSISTANCE_TIMEOUT`: Request timeout seconds (default: `20`)
+- `AI_ASSISTANCE_CHAT_MAX_MESSAGES`: Max session chat messages kept (default: `20`)
+- `AI_ASSISTANCE_CHAT_MAX_SESSION_BYTES`: Max serialized chat-history payload stored in the session (default: `3000`)
 
 Internationalization:
 - `LANGUAGE_CODE`, `USE_I18N`, `LOCALE_PATHS` per standard Django i18n
@@ -99,10 +102,11 @@ http://localhost:8000/ask-ai/
 ### Features Available
 
 1. **Ask Questions**: Users can submit any question through a textarea form
-2. **Get AI Responses**: Receive intelligent responses from the configured model
-3. **Error Handling**: Graceful handling of API errors with user-friendly messages
-4. **Headless Core**: Logic extracted to `ai_assistance/core.py` (no Django/UI coupling)
-5. **JSON API**: `POST /ai/api/ask/` returns `{ "answer": "..." }`
+2. **Chat History**: Follow-up questions keep prior turns in the session and send them to the model
+3. **Clear Chat**: Reset the conversation from the chat UI
+4. **Error Handling**: Graceful handling of API errors with user-friendly messages
+5. **Headless Core**: Logic extracted to `ai_assistance/core.py` (no Django/UI coupling)
+6. **JSON API**: `POST /ai/api/ask/` returns `{ "answer": "..." }`
 
 ### API Integration Details
 
@@ -127,8 +131,8 @@ ai_assistance/
 ├── migrations/            # Database migrations
 ├── templates/
 │   └── ai_assistance/
-│       ├── ai_question_page.html    # Question form interface
-│       └── ai_response.html         # Response display page
+│       ├── ai_chat.html           # Chat history + ask form
+│       └── test_base.html         # Minimal base template for tests
 ├── LICENSE                # MIT License
 ├── README.md             # This file
 └── .gitignore            # Git ignore rules
