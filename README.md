@@ -85,6 +85,7 @@ httpx>=0.24.0
 - `AI_ASSISTANCE_MODEL`: Model name (default: `'openai/gpt-4o-mini'`)
 - `AI_ASSISTANCE_TIMEOUT`: Request timeout seconds (default: `20`)
 - `AI_ASSISTANCE_CHAT_MAX_MESSAGES`: Max session chat messages kept (default: `20`)
+- `AI_ASSISTANCE_CHAT_MAX_SESSION_BYTES`: Max serialized chat-history payload stored in the session (default: `3000`)
 
 Internationalization:
 - `LANGUAGE_CODE`, `USE_I18N`, `LOCALE_PATHS` per standard Django i18n

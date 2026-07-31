@@ -1,3 +1,4 @@
+import json
 from importlib import import_module
 from typing import Optional
 
@@ -102,6 +103,7 @@ def resolve_intro_text(request) -> str:
 
 CHAT_SESSION_KEY = "ai_assistance_chat"
 DEFAULT_CHAT_MAX_MESSAGES = 20
+DEFAULT_CHAT_MAX_SESSION_BYTES = 3000
 
 
 def resolve_chat_max_messages() -> int:
@@ -114,23 +116,67 @@ def resolve_chat_max_messages() -> int:
     )
 
 
+def resolve_chat_max_session_bytes() -> int:
+    return int(
+        getattr(
+            settings,
+            "AI_ASSISTANCE_CHAT_MAX_SESSION_BYTES",
+            DEFAULT_CHAT_MAX_SESSION_BYTES,
+        )
+    )
+
+
+def _get_session(request):
+    return getattr(request, "session", None)
+
+
+def _serialized_size(value) -> int:
+    return len(
+        json.dumps(value, ensure_ascii=False, separators=(",", ":")).encode(
+            "utf-8"
+        )
+    )
+
+
+def _trim_chat_history(history: list) -> list:
+    max_messages = resolve_chat_max_messages()
+    max_session_bytes = resolve_chat_max_session_bytes()
+    trimmed = list(history)[-max_messages:]
+
+    while trimmed and _serialized_size(trimmed) > max_session_bytes:
+        trimmed = trimmed[1:]
+
+    return trimmed
+
+
 def get_chat_history(request) -> list:
     """Return the session chat history as a list of role/content dicts."""
-    history = request.session.get(CHAT_SESSION_KEY, [])
+    session = _get_session(request)
+    if session is None:
+        return []
+
+    history = session.get(CHAT_SESSION_KEY, [])
     if not isinstance(history, list):
         return []
     return list(history)
 
 
 def save_chat_history(request, history: list) -> None:
-    """Persist chat history in the session, trimmed to the configured max."""
-    max_messages = resolve_chat_max_messages()
-    request.session[CHAT_SESSION_KEY] = list(history)[-max_messages:]
-    request.session.modified = True
+    """Persist chat history in the session when sessions are available."""
+    session = _get_session(request)
+    if session is None:
+        return
+
+    session[CHAT_SESSION_KEY] = _trim_chat_history(history)
+    session.modified = True
 
 
 def clear_chat_history(request) -> None:
-    """Remove chat history from the session."""
-    if CHAT_SESSION_KEY in request.session:
-        del request.session[CHAT_SESSION_KEY]
-        request.session.modified = True
+    """Remove chat history from the session when sessions are available."""
+    session = _get_session(request)
+    if session is None:
+        return
+
+    if CHAT_SESSION_KEY in session:
+        del session[CHAT_SESSION_KEY]
+        session.modified = True

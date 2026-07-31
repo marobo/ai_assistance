@@ -1,10 +1,15 @@
 from unittest.mock import patch
 
-from django.test import Client, TestCase, override_settings
+from django.test import Client, RequestFactory, TestCase, override_settings
 from django.urls import reverse
 
 from .core import ask_ai
-from .utils import CHAT_SESSION_KEY
+from .utils import (
+    CHAT_SESSION_KEY,
+    get_chat_history,
+    save_chat_history,
+    clear_chat_history,
+)
 
 
 class AskAICoreHistoryTests(TestCase):
@@ -102,6 +107,37 @@ class AskAIChatHistoryTests(TestCase):
         self.assertEqual(response.context['chat_messages'], [])
         self.assertNotContains(response, 'Hello?')
         mock_ask.assert_called_once()
+
+    def test_chat_history_helpers_noop_without_session(self):
+        request = RequestFactory().get(self.url)
+
+        self.assertEqual(get_chat_history(request), [])
+        save_chat_history(request, [{'role': 'user', 'content': 'Hello?'}])
+        clear_chat_history(request)
+
+    @override_settings(
+        AI_ASSISTANCE_CHAT_MAX_MESSAGES=20,
+        AI_ASSISTANCE_CHAT_MAX_SESSION_BYTES=120,
+    )
+    def test_save_chat_history_trims_by_serialized_size(self):
+        session = self.client.session
+        session[CHAT_SESSION_KEY] = []
+        session.save()
+
+        request = RequestFactory().get(self.url)
+        request.session = self.client.session
+        history = [
+            {'role': 'user', 'content': 'x' * 80},
+            {'role': 'assistant', 'content': 'y' * 80},
+            {'role': 'user', 'content': 'short'},
+        ]
+
+        save_chat_history(request, history)
+
+        self.assertEqual(
+            request.session[CHAT_SESSION_KEY],
+            [{'role': 'user', 'content': 'short'}],
+        )
 
     @patch('ai_assistance.views.core_ask_ai')
     def test_chat_messages_rendered_in_template(self, mock_ask):
