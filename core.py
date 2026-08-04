@@ -1,8 +1,12 @@
 import httpx
 from typing import List, Optional
+from decouple import config
 
 
-DEFAULT_MODEL = "openai/gpt-4o-mini"
+DEFAULT_MODEL = config(
+    "OPENROUTER_MODEL",
+    "deepseek/deepseek-chat-v3",
+)
 
 
 def ask_ai(
@@ -78,10 +82,11 @@ def ask_ai(
                 "AI service is currently busy. "
                 "Please try again in a few moments."
             )
-        return (
-            f"AI service error (Status: {response.status_code}). "
-            "Please try again later."
-        )
+        try:
+            error = response.json()
+            return f"Status {response.status_code}: {error}"
+        except Exception:
+            return f"Status {response.status_code}: {response.text}"
 
     except httpx.TimeoutException:
         return "AI service request timed out. Please try again."
