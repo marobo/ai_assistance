@@ -1,10 +1,12 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 
 from .core import ask_ai as core_ask_ai
+from .rate_limit import is_rate_limited
 from .utils import (
     resolve_base_template,
     resolve_system_prompt,
@@ -18,7 +20,14 @@ from .utils import (
 )
 
 
-class AskAIView(View):
+def _rate_limited_response(as_json=False):
+    message = _('Too many requests. Please wait and try again.')
+    if as_json:
+        return JsonResponse({'error': str(message)}, status=429)
+    return HttpResponse(str(message), status=429)
+
+
+class AskAIView(LoginRequiredMixin, View):
     def _render_chat(self, request):
         base_template = resolve_base_template(request)
         return render(request, 'ai_assistance/ai_chat.html', {
@@ -42,6 +51,9 @@ class AskAIView(View):
         if not question:
             return self._render_chat(request)
 
+        if is_rate_limited(request):
+            return _rate_limited_response(as_json=False)
+
         ai_response = core_ask_ai(
             question,
             api_key=getattr(settings, 'OPENROUTER_API_KEY', None),
@@ -58,32 +70,23 @@ class AskAIView(View):
         return self._render_chat(request)
 
 
-# For programmatic access via API
-class AskAIAPIView(View):
-    def get(self, request):
-        question = request.GET.get('question', '').strip()
-        if not question:
-            return JsonResponse(
-                {"error": _("Please provide a question.")}, status=400
-            )
+class AskAIAPIView(LoginRequiredMixin, View):
+    """Authenticated JSON API for AI answers. POST only."""
 
-        answer = core_ask_ai(
-            question,
-            api_key=getattr(settings, 'OPENROUTER_API_KEY', None),
-            system_prompt=resolve_system_prompt(request),
-            model=resolve_model_name(),
-            timeout_seconds=resolve_timeout_seconds(),
-        )
-        return JsonResponse({"answer": answer})
+    http_method_names = ['post', 'options']
 
     def post(self, request):
+        if is_rate_limited(request):
+            return _rate_limited_response(as_json=True)
+
         question = (
             request.POST.get('question', '').strip()
-            or request.GET.get('question', '').strip()
+            or (request.body and self._json_question(request))
+            or ''
         )
         if not question:
             return JsonResponse(
-                {"error": _("Please provide a question.")}, status=400
+                {'error': str(_('Please provide a question.'))}, status=400
             )
 
         answer = core_ask_ai(
@@ -93,4 +96,13 @@ class AskAIAPIView(View):
             model=resolve_model_name(),
             timeout_seconds=resolve_timeout_seconds(),
         )
-        return JsonResponse({"answer": answer})
+        return JsonResponse({'answer': answer})
+
+    @staticmethod
+    def _json_question(request):
+        import json
+        try:
+            payload = json.loads(request.body.decode('utf-8') or '{}')
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            return ''
+        return str(payload.get('question', '')).strip()
