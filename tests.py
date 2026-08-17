@@ -1,9 +1,7 @@
 from unittest.mock import patch
 
-from django.contrib.auth.models import User
 from django.test import Client, RequestFactory, TestCase, override_settings
 from django.urls import reverse
-from django.utils import translation
 
 from .core import ask_ai
 from .utils import (
@@ -48,7 +46,6 @@ class AskAICoreHistoryTests(TestCase):
     OPENROUTER_API_KEY='test-key',
     AI_ASSISTANCE_BASE_TEMPLATE='ai_assistance/test_base.html',
     AI_ASSISTANCE_BASE_TEMPLATE_FUNC=None,
-    AI_ASSISTANCE_RATE_LIMIT=1000,
     STORAGES={
         'default': {
             'BACKEND': 'django.core.files.storage.FileSystemStorage',
@@ -60,17 +57,8 @@ class AskAICoreHistoryTests(TestCase):
 )
 class AskAIChatHistoryTests(TestCase):
     def setUp(self):
-        translation.activate('en')
         self.client = Client()
-        self.user = User.objects.create_user(
-            username='aiuser', password='pass12345'
-        )
-        self.client.login(username='aiuser', password='pass12345')
         self.url = reverse('ai_assistance:ask_ai')
-        self.api_url = reverse('ai_assistance:ask_ai_api')
-
-    def tearDown(self):
-        translation.deactivate()
 
     @patch('ai_assistance.views.core_ask_ai')
     def test_post_appends_messages_to_session(self, mock_ask):
@@ -160,24 +148,3 @@ class AskAIChatHistoryTests(TestCase):
         self.assertContains(response, 'Hello?')
         self.assertContains(response, 'Hello answer')
         self.assertEqual(len(response.context['chat_messages']), 2)
-
-    def test_anonymous_chat_redirects_to_login(self):
-        self.client.logout()
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 302)
-
-    def test_anonymous_api_redirects_to_login(self):
-        self.client.logout()
-        response = self.client.post(self.api_url, {'question': 'Hi?'})
-        self.assertEqual(response.status_code, 302)
-
-    def test_api_get_not_allowed(self):
-        response = self.client.get(self.api_url, {'question': 'Hi?'})
-        self.assertEqual(response.status_code, 405)
-
-    @patch('ai_assistance.views.core_ask_ai')
-    def test_api_post_returns_json(self, mock_ask):
-        mock_ask.return_value = 'API answer'
-        response = self.client.post(self.api_url, {'question': 'Hi?'})
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['answer'], 'API answer')

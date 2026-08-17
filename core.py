@@ -5,7 +5,7 @@ from decouple import config
 
 DEFAULT_MODEL = config(
     "OPENROUTER_MODEL",
-    default="openai/gpt-4o-mini",
+    "deepseek/deepseek-chat-v3",
 )
 
 
