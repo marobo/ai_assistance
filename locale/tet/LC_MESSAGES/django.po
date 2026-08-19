@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-29 23:09+0900\n"
-"PO-Revision-Date: 2025-09-29 23:07+0900\n"
-"Last-Translator:   <dejesusony@gmail.com>\n"
+"POT-Creation-Date: 2026-08-19 14:11+0900\n"
+"PO-Revision-Date: 2026-08-19 14:44+0900\n"
+"Last-Translator: Onório Afonso <onorio.dja@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -21,11 +21,11 @@ msgstr ""
 msgid "Ask AI Assistant"
 msgstr "Husu Asistente AI"
 
+msgid "Clear Chat"
+msgstr "Hamoos Konversa"
+
 msgid "AI is thinking..."
 msgstr "AI sei hanoin hela..."
-
-msgid "Your Question"
-msgstr "Ita-nia Pergunta"
 
 msgid "Type your question here..."
 msgstr "Hakerek ita-nia pergunta iha ne'e..."
@@ -33,26 +33,31 @@ msgstr "Hakerek ita-nia pergunta iha ne'e..."
 msgid "Ask AI"
 msgstr "Husu AI"
 
-msgid "AI Response"
-msgstr "AI Responde"
-
-msgid "AI Response to your question"
-msgstr "AI Responde ba ita-boot nia pergunta"
-
-msgid "Ask Another Question"
-msgstr "Husu Pergunta Seluk"
-
-msgid "Your Question:"
-msgstr "Ita-nia Pergunta:"
-
-msgid "AI Response:"
-msgstr "AI Responde:"
-
 msgid "Ask me anything about this app. I'm here to help you!"
-msgstr "Husu mai ha'u buat ruma kona-ba aplikasaun ida-ne'e. Ha'u iha ne'e atu ajuda ita-boot!"
-
-msgid "Please provide a question to get an AI response."
-msgstr "Favór ida fo pergunta ida ba AI hodi hetan resposta."
+msgstr ""
+"Husu mai ha'u buat ruma kona-ba aplikasaun ida-ne'e. Ha'u iha ne'e atu ajuda"
+" ita-boot!"
 
 msgid "Please provide a question."
 msgstr "Favór ida fo pergunta."
+
+#~ msgid "Your Question"
+#~ msgstr "Ita-nia Pergunta"
+
+#~ msgid "AI Response"
+#~ msgstr "AI Responde"
+
+#~ msgid "AI Response to your question"
+#~ msgstr "AI Responde ba ita-boot nia pergunta"
+
+#~ msgid "Ask Another Question"
+#~ msgstr "Husu Pergunta Seluk"
+
+#~ msgid "Your Question:"
+#~ msgstr "Ita-nia Pergunta:"
+
+#~ msgid "AI Response:"
+#~ msgstr "AI Responde:"
+
+#~ msgid "Please provide a question to get an AI response."
+#~ msgstr "Favór ida fo pergunta ida ba AI hodi hetan resposta."
